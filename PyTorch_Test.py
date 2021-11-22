@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import time
+import sys
 
 import math
 from collections import OrderedDict
@@ -90,20 +91,20 @@ def test(testloader, net, device):
             100 * correct / total))
 
 
-def main():
+def main(dir):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     transform = transforms.Compose(
         [transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-    trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                            download=True, transform=transform)
+    trainset = torchvision.datasets.CIFAR10(root=dir, train=True,
+                                            download=False, transform=transform)
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=100,
                                               shuffle=True)
 
-    testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                           download=True, transform=transform)
+    testset = torchvision.datasets.CIFAR10(root=dir, train=False,
+                                           download=False, transform=transform)
     testloader = torch.utils.data.DataLoader(testset, batch_size=100,
                                              shuffle=False)
     net = VGG().to(device)
@@ -117,5 +118,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) != 2:
+        print("Usage: python3 main.py <directory to CIFAR 10 data folder>")
+    else:
+        dir = sys.argv[1]
+        main(dir)
 
