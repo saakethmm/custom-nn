@@ -2,7 +2,7 @@ import numpy as np
 from Layer import Layer
 
 
-class ActivationFunction(Layer):
+class ActivationLayer(Layer):
     def __init__(self, type):
         Layer.__init__(self)
         # super(ActivationFunction, self).__init__()
