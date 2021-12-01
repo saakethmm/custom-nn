@@ -1,11 +1,19 @@
 import numpy as np
+import Layer
 
-class FCLayer:
-    def __init__(self, type):
-        super(FCLayer, self).__init__()
+# Single fully connected layer
+class FCLayer (Layer):
+    def __init__(self, input_size, output_size):
+        # Initializes the Layer class
+        self.weights = np.random.rand(input_size, output_size)
+        self.bias = np.random.rand(output_size, 1)
 
-    def forwardPop(self):
-        return 0
+    # Returns output for a given input
+    def forwardProp(self, input):
+        self.input = input
+        self.output = np.matmul(self.weights, self.input) + self.bias
+        return self.output
 
-    def backProp(self):
+
+    def backwardProp(self):
         return 0

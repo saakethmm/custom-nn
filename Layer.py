@@ -6,7 +6,7 @@ class Layer:
         self.input = None
         self.output = None
 
-    def forwardPop(self, input):
+    def forwardProp(self, input):
         return 0
 
     def backProp(self, output_error):
