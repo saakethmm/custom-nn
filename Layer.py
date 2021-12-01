@@ -6,8 +6,12 @@ class Layer:
         self.input = None
         self.output = None
 
-    def forwardProp(self, input):
-        return 0
+    # Does this need to be a base class function?
+    def update_weights(self):
+        raise NotImplementedError
 
-    def backProp(self, output_error):
-        return 0
+    def forward_prop(self, input):
+        return NotImplementedError
+
+    def backward_prop(self, output_error):
+        return NotImplementedError

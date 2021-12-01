@@ -16,12 +16,12 @@ class Network:
             for j in range(len(x_train)):
                 output = x_train[j]
                 for layer in self.layers:
-                    output = layer.forwardPop(output)
+                    output = layer.forward_prop(output)
 
                 loss = loss + self.loss(y_train[j], output)
 
                 error = self.loss_prime(y_train[j], output)
-                for later in reversed(self.layers):
+                for layer in reversed(self.layers):
                     error = layer.backProp(error, lr)
 
             average_loss = loss/len(x_train)
@@ -33,7 +33,7 @@ class Network:
         for i in range(len(input)):
             output = input[i]
             for layer in self.layers:
-                output = layer.forwardPop(output)
+                output = layer.forward_prop(output)
             results.append(output)
 
         return results

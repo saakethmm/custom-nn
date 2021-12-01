@@ -4,11 +4,10 @@ from Layer import Layer
 
 class ActivationLayer(Layer):
     def __init__(self, type):
-        Layer.__init__(self)
         # super(ActivationFunction, self).__init__()
         self.type = type
 
-    def forwardPop(self, input_data):
+    def forward_prop(self, input_data):
         self.input = input_data
         if type == "tan":
             self.output = self.tanh(self.input)
@@ -20,7 +19,7 @@ class ActivationLayer(Layer):
             self.output = self.leaky_ReLU(self.input)
         return self.output
 
-    def backProp(self, output_error):
+    def backward_prop(self, output_error):
         if type == "tan":
             return self.tanh_prime(self.input)*output_error
         elif type == "sigmoid":
