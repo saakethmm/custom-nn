@@ -13,5 +13,5 @@ class Layer:
     def forward_prop(self, input):
         return NotImplementedError
 
-    def backward_prop(self, output_error):
+    def backward_prop(self, output_error, lr):
         return NotImplementedError

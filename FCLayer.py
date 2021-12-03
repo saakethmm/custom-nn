@@ -6,12 +6,15 @@ class FCLayer (Layer):
     def __init__(self, input_size, output_size):
         # Initializes the Layer class
         self.weights = np.random.rand(input_size, output_size)
-        self.bias = np.random.rand(output_size, 1)
+        self.bias = np.random.rand(1, output_size)
 
     # Returns output for a given input
     def forward_prop(self, input):
         self.input = input
-        self.output = np.matmul(self.weights, self.input) + self.bias
+        print(input.shape)
+        #self.output = np.matmul(self.weights, self.input) + self.bias
+        self.output = np.dot(self.input, self.weights) + self.bias
+
         return self.output
 
     # Given dE/dY from activation layer function?
@@ -21,9 +24,9 @@ class FCLayer (Layer):
         Updates the weight and bias errors given the output error\n
         Calls gradient_desc to perform gradient descent on the parameters
         """
-        self.weight_error = np.matmul(self.input, output_error.T)
-        self.bias_error = self.output_error # TODO: May want to remove to save space ...
-        self.input_error = np.matmul(self.weights, output_error)
+        self.weight_error = np.dot(self.input.T, output_error)
+        self.bias_error = output_error # TODO: May want to remove to save space ...
+        self.input_error = np.dot(self.weights, output_error.T)
 
         self.update_weights(learning_rate)
 
