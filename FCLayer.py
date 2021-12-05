@@ -5,8 +5,8 @@ from Layer import Layer
 class FCLayer (Layer):
     def __init__(self, input_size, output_size):
         # Initializes the Layer class
-        self.weights = np.random.rand(input_size, output_size)
-        self.bias = np.random.rand(1, output_size)
+        self.weights = np.random.rand(input_size, output_size) - 0.5
+        self.bias = np.random.rand(1, output_size) - 0.5
 
     # Returns output for a given input
     def forward_prop(self, input):

@@ -23,33 +23,15 @@ def main():
 
     network = Network(mse, mse_prime)
     network.add_layer(FCLayer(32*32*3, 64))
-    network.add_layer(ActivationLayer('relu'))
+    network.add_layer(ActivationLayer('tan'))
     network.add_layer(FCLayer(64, 10))
 
-    network.train(X_train[0:100], y_train[0:100], niter=10, lr=0.1)
-    results = network.maxOutput(network.predict(X_test[0:2]))
-    print(results)
+    network.train(X_train[0:10000], y_train[0:10000], niter=10, lr=0.1)
+    num_test = 100
+    results = (network.predict(X_test[0:num_test]))
+    results2 = network.maxOutput(network.predict(X_test[0:num_test]))
 
-    '''
-    Testing using torchvision
-    
-    transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)), transforms.Grayscale(num_output_channels=1)])
-    trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                            download=True, transform=transform)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=100,
-                                              shuffle=True)
-    testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                           download=True, transform=transform)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=100,
-                                             shuffle=False)
-    print(len(trainset))
-    print(len(trainset[0]))
-    print(len(trainset[0][0]))
-    print(len(trainset[0][0][0]))
-    print(len(trainset[0][0][0][0]))
-
-    #print(trainset[0][0][0][0])
-    '''
+    print(network.accuracy(results2, y_test[0:num_test]))
 
 
 if __name__ == "__main__":

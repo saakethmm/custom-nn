@@ -22,14 +22,14 @@ class ActivationLayer(Layer):
 
     def backward_prop(self, output_error, lr): # TODO: Fix other dimensions
         if self.type == "tan":
-            return self.tanh_prime(self.input)*output_error
+            return self.tanh_prime(self.input)*output_error.T
         elif self.type == "sigmoid":
-            return self.tanh_prime(self.input)*output_error
+            return self.tanh_prime(self.input)*output_error.T
         elif self.type == "relu":
             data = self.ReLU_prime(self.input)*output_error.T
             return data
         elif self.type == "leaky":
-            return self.leaky_ReLU_prime(self.input)*output_error
+            return self.leaky_ReLU_prime(self.input)*output_error.T
 
     def tanh(self, x):
         return np.tanh(x)
@@ -52,7 +52,7 @@ class ActivationLayer(Layer):
 
     def leaky_ReLU(self, x):
         alpha = 0.1
-        return np.max(alpha*x, x)
+        return np.maximum(alpha*x, x)
 
     def leaky_ReLU_prime(self, x):
         alpha = 0.1

@@ -48,7 +48,22 @@ class Network:
 
         return results
 
-    def maxOutput(self, results):
-        return np.argmax(results, axis=1)
+    def maxOutput(self, input):
+        results = []
+        for result in input:
+            zeros = np.zeros(result.shape)
+            max_index = np.argmax(result)
+            zeros[0][max_index] = 1
+            results.append(zeros)
+        return results
+
+    def accuracy(self, pred, truth):
+        sum = 0
+        for i in range(len(pred)):
+            if np.array_equal(pred[i], truth[i]):
+                sum = sum + 1
+        return sum/len(pred)
+
+
 
 
