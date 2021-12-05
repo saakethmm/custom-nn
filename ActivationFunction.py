@@ -10,25 +10,24 @@ class ActivationLayer(Layer):
     def forward_prop(self, input_data):
         self.input = input_data
         self.output = np.zeros(self.input.shape)
-        if type == "tan":
+        if self.type == "tan":
             self.output = self.tanh(self.input)
-        elif type == "sigmoid":
+        elif self.type == "sigmoid":
             self.output = self.sigmoid(self.input)
-        elif type == "relu":
+        elif self.type == "relu":
             self.output = self.ReLU(self.input)
-        elif type == "leaky":
+        elif self.type == "leaky":
             self.output = self.leaky_ReLU(self.input)
         return self.output
 
     def backward_prop(self, output_error, lr):
-        if type == "tan":
+        if self.type == "tan":
             return self.tanh_prime(self.input)*output_error
-        elif type == "sigmoid":
+        elif self.type == "sigmoid":
             return self.tanh_prime(self.input)*output_error
-        elif type == 'relu':
-            data = self.ReLU_prime(self.input)*output_error
-            return data
-        elif type == "leaky":
+        elif self.type == "relu":
+            return self.ReLU_prime(self.input)*output_error
+        elif self.type == "leaky":
             return self.leaky_ReLU_prime(self.input)*output_error
 
     def tanh(self, x):
@@ -55,4 +54,4 @@ class ActivationLayer(Layer):
 
     def leaky_ReLU_prime(self, x):
         alpha = 0.1
-        return 1 if x>=0 else alpha
+        return 1. * (x >= 0) + alpha * (x < 0)

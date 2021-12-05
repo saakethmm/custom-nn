@@ -1,9 +1,4 @@
 import numpy as np
-import torch
-import torchvision
-import torchvision.transforms as transforms
-import time
-import sys
 from keras.datasets import cifar10
 from keras.utils import np_utils
 
@@ -34,6 +29,8 @@ def main():
 
 
     '''
+    Testing using torchvision
+    
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)), transforms.Grayscale(num_output_channels=1)])
     trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                             download=True, transform=transform)
