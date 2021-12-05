@@ -11,8 +11,6 @@ class FCLayer (Layer):
     # Returns output for a given input
     def forward_prop(self, input):
         self.input = input
-        print(input.shape)
-        #self.output = np.matmul(self.weights, self.input) + self.bias
         self.output = np.dot(self.input, self.weights) + self.bias
 
         return self.output

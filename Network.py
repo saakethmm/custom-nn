@@ -1,4 +1,5 @@
 import numpy as np
+from tqdm import tqdm
 
 
 class Network:
@@ -46,3 +47,8 @@ class Network:
             results.append(output)
 
         return results
+
+    def maxOutput(self, results):
+        return np.argmax(results, axis=1)
+
+

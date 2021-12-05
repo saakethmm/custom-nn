@@ -20,13 +20,14 @@ class ActivationLayer(Layer):
             self.output = self.leaky_ReLU(self.input)
         return self.output
 
-    def backward_prop(self, output_error, lr):
+    def backward_prop(self, output_error, lr): # TODO: Fix other dimensions
         if self.type == "tan":
             return self.tanh_prime(self.input)*output_error
         elif self.type == "sigmoid":
             return self.tanh_prime(self.input)*output_error
         elif self.type == "relu":
-            return self.ReLU_prime(self.input)*output_error
+            data = self.ReLU_prime(self.input)*output_error.T
+            return data
         elif self.type == "leaky":
             return self.leaky_ReLU_prime(self.input)*output_error
 
@@ -46,7 +47,8 @@ class ActivationLayer(Layer):
         return x * (x > 0)
 
     def ReLU_prime(self, x):
-        return 1. * (x > 0)
+        data = 1. * (x > 0)
+        return data
 
     def leaky_ReLU(self, x):
         alpha = 0.1

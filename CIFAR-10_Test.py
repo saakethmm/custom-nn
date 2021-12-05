@@ -2,6 +2,7 @@ import numpy as np
 from keras.datasets import cifar10
 from keras.utils import np_utils
 
+
 import LossFunction
 from Network import Network
 from FCLayer import FCLayer
@@ -15,18 +16,19 @@ def main():
     y_train = np.eye(10)[y_train]
     y_test = np.eye(10)[y_test]
 
-    print(X_train.shape)
-    print(y_train.shape)
-    print(X_test.shape)
-    print(y_test.shape)
+    # print(X_train.shape)
+    # print(y_train.shape)
+    # print(X_test.shape)
+    # print(y_test.shape)
 
     network = Network(mse, mse_prime)
     network.add_layer(FCLayer(32*32*3, 64))
     network.add_layer(ActivationLayer('relu'))
     network.add_layer(FCLayer(64, 10))
 
-    network.train(X_train[0:1000], y_train[0:1000], niter=100, lr=0.1)
-
+    network.train(X_train[0:100], y_train[0:100], niter=10, lr=0.1)
+    results = network.maxOutput(network.predict(X_test[0:2]))
+    print(results)
 
     '''
     Testing using torchvision
