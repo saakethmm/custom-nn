@@ -19,13 +19,6 @@ def main():
     y_train = np.eye(10)[y_train]
     y_test = np.eye(10)[y_test]
 
-    '''
-    network = Network(mse, mse_prime)
-    network.add_layer(FCLayer(32*32*3, 64))
-    network.add_layer(ActivationLayer('tan'))
-    network.add_layer(FCLayer(64, 10))
-    '''
-
     network = Network(mse, mse_prime)
     network.add_layer(FCLayer(32*32*3, 32*16))
     network.add_layer(ActivationLayer('tan'))
@@ -36,7 +29,6 @@ def main():
     network.train(X_train[0:1000], y_train[0:1000], niter=3, lr=0.1)
     num_test = 100
     results = (network.predict(X_test[0:num_test]))
-    #print(results)
     results2, acc = network.accuracy(results, y_test[0:num_test])
     print(acc)
 
