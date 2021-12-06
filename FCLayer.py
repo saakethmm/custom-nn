@@ -22,9 +22,9 @@ class FCLayer (Layer):
         Updates the weight and bias errors given the output error\n
         Calls gradient_desc to perform gradient descent on the parameters
         """
+        self.input_error = np.dot(output_error, self.weights.T)
         self.weight_error = np.dot(self.input.T, output_error)
         self.bias_error = output_error # TODO: May want to remove to save space ...
-        self.input_error = np.dot(self.weights, output_error.T)
 
         self.update_weights(learning_rate)
 

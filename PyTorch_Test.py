@@ -109,8 +109,8 @@ def main(dir):
     optimizer = optim.Adam(net.parameters(), lr=0.001)
     # optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-    #train(trainloader, net, criterion, optimizer, device)
-    #test(testloader, net, device)
+    train(trainloader, net, criterion, optimizer, device)
+    test(testloader, net, device)
 
 
 if __name__ == "__main__":

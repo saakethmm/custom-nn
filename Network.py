@@ -48,21 +48,18 @@ class Network:
 
         return results
 
-    def maxOutput(self, input):
+    def accuracy(self, input, truth):
         results = []
-        for result in input:
-            zeros = np.zeros(result.shape)
-            max_index = np.argmax(result)
+        sum = 0
+        for i in range(len(input)):
+            zeros = np.zeros(input[i].shape)
+            max_index = np.argmax(input[i])
+            correct_index = np.argmax(truth[i])
+            sum += max_index == correct_index
             zeros[0][max_index] = 1
             results.append(zeros)
-        return results
+        return results, sum/len(input)
 
-    def accuracy(self, pred, truth):
-        sum = 0
-        for i in range(len(pred)):
-            if np.array_equal(pred[i], truth[i]):
-                sum = sum + 1
-        return sum/len(pred)
 
 
 
