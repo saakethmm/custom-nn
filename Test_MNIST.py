@@ -36,29 +36,55 @@ network.add_layer(FCLayer(50, 10))
 '''
 
 network = Network(mse, mse_prime)
-network.add_layer(FCLayer(28*28, 100))
+network.add_layer(FCLayer(28*28, 28*7))
 network.add_layer(ActivationLayer('tan'))
-network.add_layer(FCLayer(100, 10))
+network.add_layer(FCLayer(28*7, 14*7))
+network.add_layer(ActivationLayer('tan'))
+network.add_layer(FCLayer(14*7, 7*7))
+network.add_layer(ActivationLayer('tan'))
+network.add_layer(FCLayer(7*7, 10))
 
 
-num_train = 5000;
-num_epochs = 30
-learning_rate = 0.1
-loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate)
-plt.plot(range(num_epochs), loss)
-plt.xlabel('epoch #')
-plt.ylabel('Training MSE Loss')
-plt.title('MNIST Training Loss with 5000 training samples')
-plt.savefig('MNIST_Test2.png')
+train_accuracy = []
+test_accuracy = []
+losses = []
+train_vals = [1000, 2000, 3000, 4000, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 50000, 60000]
+
+for num_train in train_vals:
+    num_epochs = 50
+    learning_rate = 0.1
+    loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate)
+
+    num_test = 10000
+    results = network.predict(x_test[0:num_test])
+    results_test, acc_test = network.accuracy(results, y_test[0:num_test])
+
+    results2 = network.predict(x_train[0:num_train])
+    results_train, acc_train = network.accuracy(results2, y_train[0:num_train])
+
+    plt.plot(range(num_epochs), loss)
+    plt.xlabel('epoch #')
+    plt.ylabel('Training MSE Loss')
+    plt.title('MNIST Training Loss with ' + str(num_train) + ' Training Data Samples')
+    plt.savefig('MNIST_Train_Loss_' + str(num_train) + '.png')
+    plt.clf()
+
+    acc_train *= 100
+    train_accuracy.append(acc_train)
+    acc_test *= 100
+    test_accuracy.append(acc_test)
 
 
-num_test = 100
-results = network.predict(x_test[0:num_test])
-results_test, acc_test = network.accuracy(results, y_test[0:num_test])
+plt.plot(train_vals, train_accuracy, '-b', label="Train")
+plt.plot(train_vals, test_accuracy, '-r', label="Test")
+plt.xlabel('# of training samples')
+plt.ylabel('Accuracy (%)')
+plt.legend()
+plt.title('Change in Train/Test Accuracy with Increasing\n# Training Data Samples')
+plt.savefig('MNIST_accuracy.png')
 
-results2 = network.predict(x_train[0:num_train])
-results_train, acc_train = network.accuracy(results, y_train[0:num_train])
 
-print("The Train Accuracy is " + ("{:.2f}".format(acc_train*100)) + "%")
-print("The Test Accuracy is " + ("{:.2f}".format(acc_test*100)) + "%")
+
+# print("The Train Accuracy is " + ("{:.2f}".format(acc_train*100)) + "%")
+# print("The Test Accuracy is " + ("{:.2f}".format(acc_test*100)) + "%")
 
