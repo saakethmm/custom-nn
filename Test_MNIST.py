@@ -29,20 +29,22 @@ y_test = np_utils.to_categorical(y_test)
 network = Network(mse, mse_prime)
 network.add_layer(FCLayer(28*28, 100))
 network.add_layer(ActivationLayer('tan'))
-network.add_layer(FCLayer(100, 50))
-network.add_layer(ActivationLayer('tan'))
-network.add_layer(FCLayer(50, 10))
-#network.add_layer(ActivationLayer('tan'))
+network.add_layer(FCLayer(100, 10))
 '''
 
+
 network = Network(mse, mse_prime)
-network.add_layer(FCLayer(28*28, 100))
+network.add_layer(FCLayer(28*28, 28*7))
 network.add_layer(ActivationLayer('tan'))
-network.add_layer(FCLayer(100, 10))
+network.add_layer(FCLayer(28*7, 14*7))
+network.add_layer(ActivationLayer('tan'))
+network.add_layer(FCLayer(14*7, 7*7))
+network.add_layer(ActivationLayer('tan'))
+network.add_layer(FCLayer(7*7, 10))
 
 
-num_train = 5000;
-num_epochs = 30
+num_train = 60000
+num_epochs = 100
 learning_rate = 0.1
 loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate)
 plt.plot(range(num_epochs), loss)
@@ -52,12 +54,12 @@ plt.title('MNIST Training Loss with 5000 training samples')
 plt.savefig('MNIST_Test2.png')
 
 
-num_test = 100
+num_test = 10000
 results = network.predict(x_test[0:num_test])
 results_test, acc_test = network.accuracy(results, y_test[0:num_test])
 
 results2 = network.predict(x_train[0:num_train])
-results_train, acc_train = network.accuracy(results, y_train[0:num_train])
+results_train, acc_train = network.accuracy(results2, y_train[0:num_train])
 
 print("The Train Accuracy is " + ("{:.2f}".format(acc_train*100)) + "%")
 print("The Test Accuracy is " + ("{:.2f}".format(acc_test*100)) + "%")

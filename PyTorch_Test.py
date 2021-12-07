@@ -19,18 +19,8 @@ class VGG(nn.Module):
         )
         self.fc = nn.Sequential(
             nn.Linear(32*32*3, 64),
-
             nn.ReLU(),
-
-            # here you can try adding more fully-connected layers followed by
-            # ReLU, if you want.
             nn.Linear(64, 10)
-
-            # the softmax will be part of the cross entropy loss (defined
-            # in main()) so we just need to have a linear layer with output size
-            # equal to the number of classes (10). This is what is accomplished
-            # by the layer you will implement above.
-
         )
 
     def forward(self, x):
