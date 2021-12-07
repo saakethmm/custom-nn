@@ -44,16 +44,17 @@ network.add_layer(FCLayer(14*7, 7*7))
 network.add_layer(ActivationLayer('tan'))
 network.add_layer(FCLayer(7*7, 10))
 
+# Change everything to use numpy arrays
 
 train_accuracy = []
 test_accuracy = []
 losses = []
-train_vals = [1000, 2000, 3000, 4000, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 50000, 60000]
+train_vals = [1000, 2000, 3000, 4000, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000, 55000, 60000]
 
 for num_train in train_vals:
     num_epochs = 50
     learning_rate = 0.1
-    loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate)
+    train_loss, val_loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate)
 
     num_test = 10000
     results = network.predict(x_test[0:num_test])
@@ -62,11 +63,13 @@ for num_train in train_vals:
     results2 = network.predict(x_train[0:num_train])
     results_train, acc_train = network.accuracy(results2, y_train[0:num_train])
 
-    plt.plot(range(num_epochs), loss)
+    plt.plot(range(num_epochs), train_loss, '-b', label="Train")
+    plt.plot(range(num_epochs), val_loss, '-k', label="Validation")
     plt.xlabel('epoch #')
-    plt.ylabel('Training MSE Loss')
-    plt.title('MNIST Training Loss with ' + str(num_train) + ' Training Data Samples')
-    plt.savefig('MNIST_Train_Loss_' + str(num_train) + '.png')
+    plt.ylabel('MSE Loss')
+    plt.legend()
+    plt.title('MSE Loss with ' + str(num_train) + ' Training Samples\n(85% Train, 15% Validation)')
+    plt.savefig('MNIST_Loss_' + str(num_train) + '.png')
     plt.clf()
 
     acc_train *= 100
@@ -80,7 +83,7 @@ plt.plot(train_vals, test_accuracy, '-r', label="Test")
 plt.xlabel('# of training samples')
 plt.ylabel('Accuracy (%)')
 plt.legend()
-plt.title('Change in Train/Test Accuracy with Increasing\n# Training Data Samples')
+plt.title('Change in Train/Test Accuracy with Increasing\n# Training Samples')
 plt.savefig('MNIST_accuracy.png')
 
 

@@ -11,11 +11,14 @@ class Network:
     def add_layer(self, layer):
         self.layers.append(layer)
 
-    def train(self, x_train, y_train, niter, lr):
-        average_loss = []
+    def train(self, x_train, y_train, niter, lr, val_split=0.15):
+        train_loss = []
+        val_loss = []
         for i in tqdm(range(niter)):
             loss = 0
-            for j in range(len(x_train)):
+            train_len = int(len(x_train)*(1-val_split))
+            val_len = int(len(x_train)*val_split)
+            for j in range(train_len):
                 # sample j
                 output = x_train[j]
 
@@ -31,8 +34,22 @@ class Network:
                 for layer in reversed(self.layers):
                     error = layer.backward_prop(error, lr)
 
-            average_loss.append(loss/len(x_train))
-        return average_loss
+            train_loss.append(loss/train_len)
+            loss = 0
+
+            for j in range(train_len, len(x_train)):
+                # sample j
+                output = x_train[j]
+
+                # forward propagation
+                for layer in self.layers:
+                    output = layer.forward_prop(output)
+
+                # loss calculation
+                loss = loss + self.loss(y_train[j], output)
+            val_loss.append(loss/val_len)
+
+        return train_loss, val_loss
         # print('epoch %d/%d   error=%f' % (i+1, niter, average_loss))
 
     def predict(self, input):
