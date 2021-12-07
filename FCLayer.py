@@ -24,7 +24,7 @@ class FCLayer (Layer):
         """
         self.input_error = np.dot(output_error, self.weights.T)
         self.weight_error = np.dot(self.input.T, output_error)
-        self.bias_error = output_error # TODO: May want to remove to save space ...
+        self.bias_error = output_error
 
         self.update_weights(learning_rate)
 

@@ -2,6 +2,7 @@ from Network import Network
 from FCLayer import FCLayer
 from ActivationFunction import ActivationLayer
 from LossFunction import mse, mse_prime
+import matplotlib.pyplot as plt
 
 from keras.datasets import mnist
 from keras.utils import np_utils
@@ -40,9 +41,24 @@ network.add_layer(ActivationLayer('tan'))
 network.add_layer(FCLayer(100, 10))
 
 
-network.train(x_train[0:1000], y_train[0:1000], niter=35, lr=0.1)
+num_train = 5000;
+num_epochs = 30
+learning_rate = 0.1
+loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate)
+plt.plot(range(num_epochs), loss)
+plt.xlabel('epoch #')
+plt.ylabel('Training MSE Loss')
+plt.title('MNIST Training Loss with 5000 training samples')
+plt.savefig('MNIST_Test2.png')
+
+
 num_test = 100
-results = (network.predict(x_test[0:num_test]))
-#print(results)
-results2, acc = network.accuracy(results, y_test[0:num_test])
-print(acc)
+results = network.predict(x_test[0:num_test])
+results_test, acc_test = network.accuracy(results, y_test[0:num_test])
+
+results2 = network.predict(x_train[0:num_train])
+results_train, acc_train = network.accuracy(results, y_train[0:num_train])
+
+print("The Train Accuracy is " + ("{:.2f}".format(acc_train*100)) + "%")
+print("The Test Accuracy is " + ("{:.2f}".format(acc_test*100)) + "%")
+
