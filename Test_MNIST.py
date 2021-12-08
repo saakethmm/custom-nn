@@ -42,6 +42,7 @@ network.add_layer(FCLayer(14*7, 7*7))
 network.add_layer(ActivationLayer('tan'))
 network.add_layer(FCLayer(7*7, 10))
 
+# TODO: Nearly 32 minutes to train 60000 training data size network (18->19->23->28)
 
 num_train = 60000
 num_epochs = 100

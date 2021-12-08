@@ -37,7 +37,7 @@ class VGG(nn.Module):
 
 
 def train(trainloader, net, criterion, optimizer, device):
-    for epoch in range(20):  # loop over the dataset multiple times
+    for epoch in range(50):  # loop over the dataset multiple times
         start = time.time()
         running_loss = 0.0
         for i, (images, labels) in enumerate(trainloader):
@@ -96,7 +96,7 @@ def main(dir):
     criterion = nn.CrossEntropyLoss()
 
     # optimizer = optim.Adam(net.parameters(), lr=0.001)
-    optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+    optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9)
 
     start_time = time.time()
     train(trainloader, net, criterion, optimizer, device)
