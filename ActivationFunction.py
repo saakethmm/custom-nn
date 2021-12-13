@@ -32,6 +32,12 @@ class ActivationLayer(Layer):
         elif self.type == "leaky":
             return self.leaky_ReLU_prime(self.input)*output_error
 
+    def update_weights(self, lr, bs):
+        pass
+
+    def zero_error(self):
+        pass
+
     def tanh(self, x):
         return np.tanh(x)
 

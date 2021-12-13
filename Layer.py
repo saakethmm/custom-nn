@@ -7,7 +7,7 @@ class Layer:
         self.output = None
 
     # Does this need to be a base class function?
-    def update_weights(self):
+    def update_weights(self, lr, bs):
         raise NotImplementedError
 
     def forward_prop(self, input):

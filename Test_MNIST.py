@@ -44,10 +44,11 @@ network.add_layer(FCLayer(7*7, 10))
 
 # TODO: Nearly 32 minutes to train 60000 training data size network (18->19->23->28)
 
-num_train = 60000
-num_epochs = 100
+num_train = 5000
+num_epochs = 10
 learning_rate = 0.1
-loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate)
+batch_size = 1
+loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate, bs=batch_size)
 plt.plot(range(num_epochs), loss)
 plt.xlabel('epoch #')
 plt.ylabel('Training MSE Loss')

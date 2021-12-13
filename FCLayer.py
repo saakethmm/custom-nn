@@ -7,6 +7,8 @@ class FCLayer (Layer):
         # Initializes the Layer class
         self.weights = np.random.rand(input_size, output_size) - 0.5
         self.bias = np.random.rand(1, output_size) - 0.5
+        self.weight_error = 0
+        self.bias_error = 0
 
     # Returns output for a given input
     def forward_prop(self, input):
@@ -23,14 +25,18 @@ class FCLayer (Layer):
         Calls gradient_desc to perform gradient descent on the parameters
         """
         self.input_error = np.dot(output_error, self.weights.T)
-        self.weight_error = np.dot(self.input.T, output_error)
-        self.bias_error = output_error
+        self.weight_error += np.dot(self.input.T, output_error)
+        self.bias_error += output_error
 
-        self.update_weights(learning_rate)
-
+        # self.update_weights(learning_rate)
         return self.input_error
 
-    def update_weights(self, a):
-        self.weights -= a * self.weight_error
-        self.bias -= a * self.bias_error
+    def update_weights(self, a, bs):
+        # np.subtract(self.weights, a*self.weight_error/bs)
+        # np.subtract(self.bias, a*self.bias_error/bs)
+        self.weights -= a * self.weight_error/bs
+        self.bias -= a * self.bias_error/bs
 
+    def zero_error(self):
+        self.weight_error = 0
+        self.bias_error = 0

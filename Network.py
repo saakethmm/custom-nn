@@ -1,5 +1,6 @@
 import numpy as np
 from tqdm import tqdm
+import random as rd
 
 
 class Network:
@@ -11,25 +12,36 @@ class Network:
     def add_layer(self, layer):
         self.layers.append(layer)
 
-    def train(self, x_train, y_train, niter, lr):
+    def train(self, x_train, y_train, niter, lr, bs):
         average_loss = []
+        num_batches = int(len(x_train)/bs)
         for i in tqdm(range(niter)):
+            temp = list(zip(x_train, y_train))
+            rd.shuffle(temp)
+            x_shuffle, y_shuffle = zip(*temp)
             loss = 0
-            for j in range(len(x_train)):
-                # sample j
-                output = x_train[j]
+            # for loop to iterate over each mini-batch
+            for j in range(num_batches):
+                for k in range(j*bs, (j+1)*bs):
+                    # sample k in batch
+                    output = x_shuffle[k]
 
-                # forward propagation
+                    # forward propagation
+                    for layer in self.layers:
+                        output = layer.forward_prop(output)
+
+                    # TODO: Reset loss before each batch
+                    # loss calculation
+                    loss = loss + self.loss(y_shuffle[k], output)
+
+                    # backward propagation
+                    error = self.loss_prime(y_shuffle[k], output)
+                    for layer in reversed(self.layers):
+                        error = layer.backward_prop(error, lr)
+
                 for layer in self.layers:
-                    output = layer.forward_prop(output)
-
-                # loss calculation
-                loss = loss + self.loss(y_train[j], output)
-
-                # backward propagation
-                error = self.loss_prime(y_train[j], output)
-                for layer in reversed(self.layers):
-                    error = layer.backward_prop(error, lr)
+                    layer.update_weights(lr, bs)
+                    layer.zero_error()
 
             average_loss.append(loss/len(x_train))
         return average_loss
