@@ -44,16 +44,18 @@ network.add_layer(FCLayer(7*7, 10))
 
 # TODO: Nearly 32 minutes to train 60000 training data size network (18->19->23->28)
 
-num_train = 5000
+num_train = 1000
 num_epochs = 10
 learning_rate = 0.1
-batch_size = 1
+
+# Plot over a range of batch sizes
+batch_size = 100
 loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate, bs=batch_size)
 plt.plot(range(num_epochs), loss)
 plt.xlabel('epoch #')
 plt.ylabel('Training MSE Loss')
 plt.title('MNIST Training Loss with 5000 training samples')
-plt.savefig('MNIST_Test2.png')
+plt.savefig('MNIST_M-B_Loss/T=' + str(num_train) + '_E=' + str(num_epochs) + '_BS=' + str(batch_size) + '.png')
 
 
 num_test = 10000

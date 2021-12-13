@@ -32,10 +32,10 @@ class FCLayer (Layer):
         return self.input_error
 
     def update_weights(self, a, bs):
-        # np.subtract(self.weights, a*self.weight_error/bs)
-        # np.subtract(self.bias, a*self.bias_error/bs)
-        self.weights -= a * self.weight_error/bs
-        self.bias -= a * self.bias_error/bs
+        np.subtract(self.weights, a*self.weight_error/bs, out=self.weights)
+        np.subtract(self.bias, a*self.bias_error/bs, out=self.bias)
+        # self.weights -= a * self.weight_error/bs
+        # self.bias -= a * self.bias_error/bs
 
     def zero_error(self):
         self.weight_error = 0
