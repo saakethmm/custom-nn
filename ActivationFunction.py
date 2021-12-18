@@ -18,6 +18,8 @@ class ActivationLayer(Layer):
             self.output = self.ReLU(self.input)
         elif self.type == "leaky":
             self.output = self.leaky_ReLU(self.input)
+        elif self.type == 'softmax':
+            self.output = self.softmax(self.input)
         return self.output
 
     def backward_prop(self, output_error, lr): # TODO: Fix other dimensions
@@ -31,6 +33,8 @@ class ActivationLayer(Layer):
             return data
         elif self.type == "leaky":
             return self.leaky_ReLU_prime(self.input)*output_error
+        elif self.type == "softmax":
+            return self.softmax_prime(self.input)*output_error
 
     def tanh(self, x):
         return np.tanh(x)
@@ -59,3 +63,10 @@ class ActivationLayer(Layer):
     def leaky_ReLU_prime(self, x):
         alpha = 0.1
         return 1. * (x >= 0) + alpha * (x < 0)
+
+    def softmax(self, x):
+        st_x = np.exp(x - np.max(x))
+        return st_x/st_x.sum(axis=0)
+
+    def softmax_prime(self, x):
+        pass

@@ -1,7 +1,7 @@
 from Network import Network
 from FCLayer import FCLayer
 from ActivationFunction import ActivationLayer
-from LossFunction import mse, mse_prime
+from LossFunction import *
 import matplotlib.pyplot as plt
 
 from keras.datasets import mnist
@@ -41,11 +41,12 @@ network.add_layer(ActivationLayer('tan'))
 network.add_layer(FCLayer(14*7, 7*7))
 network.add_layer(ActivationLayer('tan'))
 network.add_layer(FCLayer(7*7, 10))
+network.add_layer(ActivationLayer('softmax'))
 
 # TODO: Nearly 32 minutes to train 60000 training data size network (18->19->23->28)
 
-num_train = 60000
-num_epochs = 100
+num_train = 5000
+num_epochs = 20
 learning_rate = 0.1
 loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate)
 plt.plot(range(num_epochs), loss)
@@ -55,7 +56,7 @@ plt.title('MNIST Training Loss with 5000 training samples')
 plt.savefig('MNIST_Test2.png')
 
 
-num_test = 10000
+num_test = 500
 results = network.predict(x_test[0:num_test])
 results_test, acc_test = network.accuracy(results, y_test[0:num_test])
 

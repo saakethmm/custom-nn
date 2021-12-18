@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -22,7 +23,8 @@ class VGG(nn.Module):
             nn.Tanh(),
             nn.Linear(14 * 7, 7 * 7),
             nn.Tanh(),
-            nn.Linear(7 * 7, 10)
+            nn.Linear(7 * 7, 10),
+            nn.Softmax(dim=1)
         )
 
     def forward(self, x):
@@ -47,6 +49,8 @@ def train(trainloader, net, criterion, optimizer, device):
             optimizer.zero_grad()
             # forward pass
             yhat = net.forward(images)
+            yhat = torch.argmax(yhat, axis=1)
+
             loss = criterion(yhat, labels)
             # backward pass
             loss.backward()
@@ -87,13 +91,13 @@ def main(dir):
          transforms.Normalize((0.1307,), (0.3081,))])
 
     trainset = torchvision.datasets.MNIST(root=dir, train=True, download=True, transform=transform)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=100, shuffle=True)
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=150, shuffle=True)
 
     testset = torchvision.datasets.MNIST(root=dir, train=False, download=True, transform=transform)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=150, shuffle=False)
 
     net = VGG().to(device)
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.MSELoss()
 
     # optimizer = optim.Adam(net.parameters(), lr=0.001)
     optimizer = optim.SGD(net.parameters(), lr=0.1, momentum=0.9)
