@@ -44,27 +44,50 @@ network.add_layer(FCLayer(7*7, 10))
 
 # TODO: Nearly 32 minutes to train 60000 training data size network (18->19->23->28)
 
-num_train = 1000
-num_epochs = 10
+num_train = 5000
+num_epochs = 30
 learning_rate = 0.1
 
 # Plot over a range of batch sizes
-batch_size = 100
-loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate, bs=batch_size)
-plt.plot(range(num_epochs), loss)
-plt.xlabel('epoch #')
+batch_sizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 50, 100, 1000, 5000]
+losses = []
+train_accuracies = []
+test_accuracies = []
+for batch_size in batch_sizes:
+    loss = network.train(x_train[0:num_train], y_train[0:num_train], niter=num_epochs, lr=learning_rate, bs=batch_size)
+    losses.append(loss)
+    plt.plot(range(num_epochs), loss)
+    plt.xlabel('epoch #')
+    plt.ylabel('Training MSE Loss')
+    plt.title('MNIST Training Loss with 5000 training samples')
+    plt.savefig('MNIST_M-B_Loss/T=' + str(num_train) + '_E=' + str(num_epochs) + '_BS=' + str(batch_size) + '.png')
+
+    num_test = 1000
+    results = network.predict(x_test[0:num_test])
+    results_test, acc_test = network.accuracy(results, y_test[0:num_test])
+
+    results2 = network.predict(x_train[0:num_train])
+    results_train, acc_train = network.accuracy(results2, y_train[0:num_train])
+
+    test_accuracies.append(acc_test*100)
+    train_accuracies.append(acc_train*100)
+
+plt.figure()
+plt.plot(batch_sizes, losses)
+plt.xlabel('batch size')
 plt.ylabel('Training MSE Loss')
-plt.title('MNIST Training Loss with 5000 training samples')
-plt.savefig('MNIST_M-B_Loss/T=' + str(num_train) + '_E=' + str(num_epochs) + '_BS=' + str(batch_size) + '.png')
+plt.title('MNIST Training Loss with Varying Batch Size')
+plt.savefig('batchvsloss.png')
 
+plt.figure()
+plt.plot(batch_sizes, test_accuracies, '-r', label='Test')
+plt.plot(batch_sizes, train_accuracies, '-b', label='Train')
+plt.legend()
+plt.xlabel('batch size')
+plt.ylabel('Accuracy (%)')
+plt.title('Train and Test Accuracy with Varying Batch Size')
+plt.savefig('accuracyvsloss.png')
 
-num_test = 10000
-results = network.predict(x_test[0:num_test])
-results_test, acc_test = network.accuracy(results, y_test[0:num_test])
-
-results2 = network.predict(x_train[0:num_train])
-results_train, acc_train = network.accuracy(results2, y_train[0:num_train])
-
-print("The Train Accuracy is " + ("{:.2f}".format(acc_train*100)) + "%")
-print("The Test Accuracy is " + ("{:.2f}".format(acc_test*100)) + "%")
+#print("The Train Accuracy is " + ("{:.2f}".format(acc_train*100)) + "%")
+#print("The Test Accuracy is " + ("{:.2f}".format(acc_test*100)) + "%")
 
